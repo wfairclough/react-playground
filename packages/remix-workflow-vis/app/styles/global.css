@@ -1,5 +1,6 @@
 :root {
   --default-font: 'San Francisco', 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  --font-family-fw: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Lucida Console', Monaco, monospace;
 }
 
 body {

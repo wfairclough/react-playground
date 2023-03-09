@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx pretty-quick --staged
+# If we have pnpm installed use it, otherwise use npx
+# if command -v pnpm >/dev/null 2>&1; then
+#   $XCMD="pnpm"
+# else
+#   $XCMD="npx"
+# fi
+
+pnpm pretty-quick --staged
 
