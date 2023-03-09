@@ -48,7 +48,7 @@ export async function getCompanies(params?: GetCompaniesParams): Promise<Company
     ...(params?.skip && { skip: Number(params.skip) }),
     ...(params?.filter && { filter: params.filter }),
     ...(params?.sort && { sort: { [params.sort.replace('-', '')]: params.sort.startsWith('-') ? -1 : 1 } }),
-    ...(params?.projection ? { projection: params.projection } : { projection: { _id: 1, name: 1 } }),
+    ...(params?.projection ? { projection: params.projection } : { projection: { _id: 1, name: 1, locale: 1 } }),
   };
   console.log(`Fetching companies ...`);
   const response = await fetch(buildUrl('/action/find'), {
