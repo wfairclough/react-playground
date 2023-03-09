@@ -26,7 +26,10 @@
     "@types/dagre": "^0.7.48",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "autoprefixer": "^10.4.13",
+    "cssnano": "^5.1.15",
     "eslint": "^8.27.0",
+    "postcss": "^8.4.21",
     "typescript": "^4.8.4"
   },
   "engines": {

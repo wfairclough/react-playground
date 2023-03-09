@@ -3,7 +3,7 @@ import { Link, useLoaderData, useParams } from '@remix-run/react';
 import { toSeconds } from '~/utils/ms';
 
 export async function loader({ params }: LoaderArgs) {
-  const { companyId, workflowType } = params;
+  const { companyId } = params;
   const apiKey = process.env.API_KEY!;
   const query = {
     collection: 'companies',
@@ -19,7 +19,6 @@ export async function loader({ params }: LoaderArgs) {
       settings: 1,
     },
   };
-  // fetchCompanies
   const companyResp = await fetch(
     'https://us-east-1.aws.data.mongodb-api.com/app/data-mbbnv/endpoint/data/v1/action/findOne',
     {
@@ -51,7 +50,7 @@ export default function CompanyPage() {
   const { workflowTypes } = useLoaderData<typeof loader>();
   const { companyId } = useParams();
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
+    <div>
       <h1>Welcome to Workflow Types</h1>
       <ul>
         {workflowTypes?.map(({ key, name }, index) => (
