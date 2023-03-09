@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@suitespot/prettier-config': ^1.2.0
       husky: 8.0.3
       prettier: 2.8.4
       pretty-quick: 3.1.3
@@ -11,6 +12,8 @@ importers:
       husky: 8.0.3
       prettier: 2.8.4
       pretty-quick: 3.1.3_prettier@2.8.4
+    devDependencies:
+      '@suitespot/prettier-config': 1.2.0_prettier@2.8.4
 
   packages/remix-workflow-vis:
     specifiers:
@@ -1992,6 +1995,14 @@ packages:
   /@sindresorhus/is/4.6.0:
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
     engines: {node: '>=10'}
+    dev: true
+
+  /@suitespot/prettier-config/1.2.0_prettier@2.8.4:
+    resolution: {integrity: sha512-wmSSY896FVK1V0OEMz8tUATdekT5tDN8dIFcuh9HMh8VxNlZoKJlPZjQ6AI60JKLxumhi59JT8n3pUP4ZJUukQ==}
+    peerDependencies:
+      prettier: 2.x
+    dependencies:
+      prettier: 2.8.4
     dev: true
 
   /@szmarczak/http-timer/4.0.6:
@@ -6363,7 +6374,6 @@ packages:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-    dev: false
 
   /pretty-format/27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}

@@ -18,5 +18,8 @@
   "volta": {
     "node": "18.14.0",
     "pnpm": "7.29.0"
+  },
+  "devDependencies": {
+    "@suitespot/prettier-config": "^1.2.0"
   }
 }

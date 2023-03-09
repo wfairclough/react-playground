@@ -1,5 +1,5 @@
-import dagre from "dagre";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import dagre from 'dagre';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -12,9 +12,9 @@ import ReactFlow, {
   Connection,
   ReactFlowInstance,
   Position,
-} from "reactflow";
-import { type WorkflowConfig } from "./workflow-config";
-import "./workflow-canvas.css";
+} from 'reactflow';
+import { type WorkflowConfig } from './workflow-config';
+import './workflow-canvas.css';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -22,25 +22,21 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 172;
 const nodeHeight = 36;
 
-const getLayoutedElements = (
-  nodes: Node[],
-  edges: Edge[],
-  direction = "TB"
-) => {
-  const isHorizontal = direction === "LR";
+const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => {
+  const isHorizontal = direction === 'LR';
   dagreGraph.setGraph({ rankdir: direction });
 
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
   });
 
-  edges.forEach((edge) => {
+  edges.forEach(edge => {
     dagreGraph.setEdge(edge.source, edge.target);
   });
 
   dagre.layout(dagreGraph);
 
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     const nodeWithPosition = dagreGraph.node(node.id);
     // node.targetPosition = isHorizontal ? 'left' : 'top';
     // node.sourcePosition = isHorizontal ? 'right' : 'bottom';
@@ -63,7 +59,7 @@ const minimapStyle = {
 };
 
 const onInit = (reactFlowInstance: ReactFlowInstance) => {
-  console.log("flow loaded:", { reactFlowInstance });
+  console.log('flow loaded:', { reactFlowInstance });
 };
 
 export interface WorkflowCanvasProps {
@@ -72,9 +68,9 @@ export interface WorkflowCanvasProps {
 
 export function useWorkflowConfigAsNodes(workflowConfig: WorkflowConfig) {
   const { nodes, edges } = useMemo(() => {
-    const edges: Edge[] = workflowConfig.transitions.map((transition) => ({
+    const edges: Edge[] = workflowConfig.transitions.map(transition => ({
       id: `${transition.fromId}-${transition.toId}`,
-      edgeType: "smoothstep",
+      edgeType: 'smoothstep',
       animated: true,
       source: transition.fromId,
       target: transition.toId,
@@ -85,14 +81,14 @@ export function useWorkflowConfigAsNodes(workflowConfig: WorkflowConfig) {
       targetPosition: Position.Top,
     };
 
-    const inputNodes = workflowConfig.events.map((event) => ({
+    const inputNodes = workflowConfig.events.map(event => ({
       id: event.id,
-      type: "input",
+      type: 'input',
       data: { label: event.name ?? event.id },
       position: { x: 0, y: 0 },
       ...commonNodeProps,
     }));
-    const stepNodes = workflowConfig.steps.map((step) => ({
+    const stepNodes = workflowConfig.steps.map(step => ({
       id: step.id,
       // type: 'input',
       data: { label: step.name ?? step.id },
@@ -111,14 +107,10 @@ export function useWorkflowConfigAsNodes(workflowConfig: WorkflowConfig) {
 }
 
 export const WorkflowCanvas = ({ workflowConfig }: WorkflowCanvasProps) => {
-  const { nodes: layoutedNodes, edges: layoutedEdges } =
-    useWorkflowConfigAsNodes(workflowConfig);
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useWorkflowConfigAsNodes(workflowConfig);
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  const onConnect = useCallback((params: Connection) => setEdges(eds => addEdge(params, eds)), []);
 
   // we are using a bit of a shortcut here to adjust the edge type
   // this could also be done with a custom edge for example
