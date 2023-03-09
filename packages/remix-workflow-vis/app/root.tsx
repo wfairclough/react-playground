@@ -1,4 +1,3 @@
-import type { MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,6 +7,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import type { MetaFunction } from "@remix-run/node";
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "New Remix App",
@@ -15,13 +16,18 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function App() {
+  const gridCss = {
+    display: "grid",
+    width: "100%",
+    height: "100%",
+  };
   return (
-    <html lang="en">
+    <html lang="en" style={{ ...gridCss }}>
       <head>
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{ ...gridCss, margin: 0 }}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
