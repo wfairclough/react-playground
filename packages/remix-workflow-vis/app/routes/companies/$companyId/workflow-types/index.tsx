@@ -1,5 +1,6 @@
-import { json, LoaderArgs } from "@remix-run/node";
+import { json, type LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { toSeconds } from "~/utils/ms";
 
 export async function loader({ params }: LoaderArgs) {
   const { companyId, workflowType } = params;
@@ -36,7 +37,14 @@ export async function loader({ params }: LoaderArgs) {
     key: string;
     name: string;
   }[];
-  return json({ workflowTypes });
+  return json(
+    { workflowTypes },
+    {
+      headers: {
+        "Cache-Control": `max-age=${toSeconds({ hours: 1 })}}`,
+      },
+    }
+  );
 }
 
 export default function CompanyPage() {

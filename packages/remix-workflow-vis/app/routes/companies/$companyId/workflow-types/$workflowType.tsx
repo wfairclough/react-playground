@@ -1,9 +1,9 @@
+import { json, type LoaderArgs, redirect } from "@remix-run/node";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
-import { WorkflowCanvas } from "~/components/workflow-canvas";
-
-import reactflowStyles from "reactflow/dist/style.css";
 import { type CSSProperties } from "react";
-import { json, type LoaderArgs } from "@remix-run/node";
+import reactflowStyles from "reactflow/dist/style.css";
+import { WorkflowCanvas } from "~/components/workflow-canvas";
+import { toSeconds } from "~/utils/ms";
 
 export async function loader({ params }: LoaderArgs) {
   const { companyId, workflowType } = params;
@@ -22,7 +22,7 @@ export async function loader({ params }: LoaderArgs) {
       settings: 1,
     },
   };
-  // fetchCompanies
+  console.log(`Fetching company ${companyId} ...`);
   const companyResp = await fetch(
     "https://us-east-1.aws.data.mongodb-api.com/app/data-mbbnv/endpoint/data/v1/action/findOne",
     {
@@ -37,10 +37,35 @@ export async function loader({ params }: LoaderArgs) {
   );
   const { document } = await companyResp.json();
   const { settings, ...company } = document;
-  const workflows = settings?.workflows;
+  const workflows: any[] = settings?.workflows;
   const workflow = workflows?.find(({ key }) => key === workflowType);
+  if (!workflow) {
+    const fakeBase = "http://FAKEBASE";
+    const notFoundUrl = new URL(
+      `/companies/${companyId}/workflow-types`,
+      fakeBase
+    );
+    notFoundUrl.searchParams.set("error", "Workflow type not found");
+    console.log(`Redirecting to ${notFoundUrl.toString()} ...`);
+    return redirect(
+      notFoundUrl
+        .toString()
+        .substring(fakeBase.length, notFoundUrl.toString().length)
+    );
+  }
   const workflowConfig = settings?.[workflow.key];
-  return json({ workflowConfig, workflows, company });
+  return json(
+    {
+      workflowConfig,
+      workflows,
+      company,
+    },
+    {
+      headers: {
+        "Cache-Control": `max-age=${toSeconds({ minutes: 1 })}}}`,
+      },
+    }
+  );
 }
 
 export default function WorkflowTypePage() {
