@@ -45,7 +45,7 @@ export const WorkflowCanvas = ({ id, workflowConfig, ...props }: WorkflowCanvasP
       fitView
       attributionPosition="top-right"
     >
-      <MiniMap style={minimapStyle} zoomable pannable />
+      {/* <MiniMap style={minimapStyle} zoomable pannable /> */}
       <Controls />
       <Background color="#aaa" gap={16} />
     </ReactFlow>
