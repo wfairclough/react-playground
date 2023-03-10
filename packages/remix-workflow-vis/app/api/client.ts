@@ -1,18 +1,18 @@
 import { ApiError } from './errors/api-error';
 import type { Company } from './model/company';
 
-export async function getCompany(companyId: string): Promise<Company> {
+export interface GetCompanyParams {
+  projection?: Record<string, 1 | 0>;
+}
+
+export async function getCompany(companyId: string, params?: GetCompanyParams): Promise<Company> {
   const query = {
     ...COMMON_QUERY_PARAMS,
     filter: {
       _id: { $oid: companyId },
       // name: 'Demonstration Corp.',
     },
-    projection: {
-      _id: 1,
-      name: 1,
-      settings: 1,
-    },
+    ...(params?.projection ? { projection: params.projection } : COMMON_COMPANY_PROJECTION),
   };
   console.log(`Fetching company ${companyId} ...`);
   const response = await fetch(buildUrl('/action/findOne'), {
@@ -48,7 +48,7 @@ export async function getCompanies(params?: GetCompaniesParams): Promise<Company
     ...(params?.skip && { skip: Number(params.skip) }),
     ...(params?.filter && { filter: params.filter }),
     ...(params?.sort && { sort: { [params.sort.replace('-', '')]: params.sort.startsWith('-') ? -1 : 1 } }),
-    ...(params?.projection ? { projection: params.projection } : { projection: { _id: 1, name: 1, locale: 1 } }),
+    ...(params?.projection ? { projection: params.projection } : COMMON_COMPANY_PROJECTION),
   };
   console.log(`Fetching companies ...`);
   const response = await fetch(buildUrl('/action/find'), {
@@ -86,6 +86,8 @@ const COMMON_QUERY_PARAMS = {
   database: 'suitespot',
   dataSource: 'SuiteSpotProduction',
 };
+
+const COMMON_COMPANY_PROJECTION = { projection: { _id: 1, name: 1, locale: 1 } };
 
 interface BuildUrlOptions {
   searchParams?: Record<string, string | number | boolean>;
