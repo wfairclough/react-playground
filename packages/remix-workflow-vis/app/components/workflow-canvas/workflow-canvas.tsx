@@ -13,7 +13,7 @@ import ReactFlow, {
 } from 'reactflow';
 
 import { useWorkflowConfigAsNodes } from './useWorkflowConfigAsNodes';
-import type { WorkflowConfig } from './workflow-config';
+import type { WorkflowConfig } from '~/api/model/workflow-config';
 
 const minimapStyle = {
   height: 160,

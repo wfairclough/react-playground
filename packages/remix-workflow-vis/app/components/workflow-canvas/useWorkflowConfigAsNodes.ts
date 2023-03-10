@@ -1,6 +1,6 @@
 import React from 'react';
 import { type Edge, type Node, Position } from 'reactflow';
-import type { WorkflowConfig } from './workflow-config';
+import type { WorkflowConfig } from '~/api/model/workflow-config';
 import dagre from 'dagre';
 
 export function useWorkflowConfigAsNodes(workflowConfig: WorkflowConfig) {

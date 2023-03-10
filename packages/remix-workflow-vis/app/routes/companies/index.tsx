@@ -36,9 +36,7 @@ export default function Index() {
     }),
     columnHelper.accessor('name', {
       header: () => <h5 className="header-name">Name</h5>,
-      cell: ({ row: { original: company } }) => (
-        <Link to={`/companies/${company._id}/workflow-types`}>{company.name}</Link>
-      ),
+      cell: ({ row: { original: company } }) => <Link to={company._id}>{company.name}</Link>,
     }),
     columnHelper.accessor('locale', {
       header: () => <h5 className="header-locale">Locale</h5>,

@@ -31,13 +31,20 @@ export async function loader({ params }: LoaderArgs) {
       body: JSON.stringify(query),
     },
   );
-  const { document: company } = await companyResp.json();
-  const workflowTypes = company?.settings?.workflows as {
+  const { document } = await companyResp.json();
+  if (!document) {
+    throw new Response('Company not found', { status: 404 });
+  }
+  const { settings, ...company } = document;
+  const workflowTypes = settings?.workflows as {
     key: string;
     name: string;
   }[];
   return json(
-    { workflowTypes },
+    {
+      company,
+      workflowTypes: workflowTypes?.map(({ key, name }) => ({ key: key.split(':')[1], name })),
+    },
     {
       headers: {
         'Cache-Control': `max-age=${toSeconds({ hours: 1 })}}`,
@@ -47,18 +54,22 @@ export async function loader({ params }: LoaderArgs) {
 }
 
 export default function CompanyPage() {
-  const { workflowTypes } = useLoaderData<typeof loader>();
-  const { companyId } = useParams();
+  const { workflowTypes, company } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Welcome to Workflow Types</h1>
-      <ul>
-        {workflowTypes?.map(({ key, name }, index) => (
-          <li key={key}>
-            <Link to={`/companies/${companyId}/workflow-types/${key}`}>{name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section className="grid-100-header-content">
+      <header>
+        <h1>{company.name}</h1>
+        <h3>Workflow Types</h3>
+      </header>
+      <p>
+        <ul>
+          {workflowTypes?.map(({ key, name }, index) => (
+            <li key={key}>
+              <Link to={key}>{name}</Link>
+            </li>
+          ))}
+        </ul>
+      </p>
+    </section>
   );
 }
