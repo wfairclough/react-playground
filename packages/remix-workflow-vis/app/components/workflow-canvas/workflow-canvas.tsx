@@ -1,6 +1,6 @@
 import './workflow-canvas.css';
 
-import React from 'react';
+import React, { HTMLProps } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -23,11 +23,11 @@ const onInit = (reactFlowInstance: ReactFlowInstance) => {
   console.log('flow loaded:', { reactFlowInstance });
 };
 
-export interface WorkflowCanvasProps {
+export interface WorkflowCanvasProps extends HTMLProps<HTMLDivElement> {
   workflowConfig: WorkflowConfig;
 }
 
-export const WorkflowCanvas = ({ workflowConfig }: WorkflowCanvasProps) => {
+export const WorkflowCanvas = ({ id, workflowConfig, ...props }: WorkflowCanvasProps) => {
   const { nodes: layoutedNodes, edges: layoutedEdges } = useWorkflowConfigAsNodes(workflowConfig);
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
@@ -35,6 +35,7 @@ export const WorkflowCanvas = ({ workflowConfig }: WorkflowCanvasProps) => {
 
   return (
     <ReactFlow
+      id={id}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}

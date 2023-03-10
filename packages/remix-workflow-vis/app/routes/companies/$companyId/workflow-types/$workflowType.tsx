@@ -3,8 +3,12 @@ import { Link, useLoaderData, useParams } from '@remix-run/react';
 import { WorkflowCanvas } from '~/components/workflow-canvas/workflow-canvas';
 import { toSeconds } from '~/utils/ms';
 import { ApiClient } from '~/api';
+import { toPng } from 'html-to-image';
 
 import reactflowStyles from 'reactflow/dist/style.css';
+import SVGDownloadIcon from '../../../../components/icons/download';
+import IconButton from '../../../../components/buttons/icon-button';
+import React from 'react';
 
 export async function loader({ params }: LoaderArgs) {
   const { companyId, workflowType } = params;
@@ -40,6 +44,17 @@ export async function loader({ params }: LoaderArgs) {
 export default function WorkflowTypePage() {
   const { company, workflowConfig } = useLoaderData<typeof loader>();
   const params = useParams();
+  const downloadPng = React.useCallback(async () => {
+    const canvas = document.getElementById('wf-canvas') as HTMLDivElement;
+    const dataUrl = await toPng(canvas, {
+      backgroundColor: 'white',
+    });
+    console.log('Downloading PNG...', { dataUrl });
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = `image.png`;
+    link.click();
+  }, []);
   return (
     <section className="grid-100-header-content">
       <header style={{ padding: '0 1rem 1rem 1rem' }}>
@@ -47,8 +62,9 @@ export default function WorkflowTypePage() {
           {company.name} <i style={{ color: 'cornflowerblue' }}>{params.workflowType}</i>
         </h1>
         <Link to={`/companies/${company._id}/workflow-types`}>{'< Workflow Types'}</Link>
+        <IconButton icon={<SVGDownloadIcon />} onClick={downloadPng} />
       </header>
-      <WorkflowCanvas workflowConfig={workflowConfig} />
+      <WorkflowCanvas id="wf-canvas" workflowConfig={workflowConfig} />
     </section>
   );
 }
